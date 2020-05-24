@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: traslation
+  labels:
+    app: traslation
+spec:
+  replicas: 4
+  minReadySeconds: 1
+  progressDeadlineSeconds: 60
+  revisionHistoryLimit: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: traslation
+  template:
+    metadata:
+      labels:
+        app: traslation
+    spec:
+      containers:
+      - name: traslation
+        image: your_server.azurecr.io/your_image:latest
+        env:
+        - name: TRANSLATOR_TEXT_SUBSCRIPTION_KEY
+          value: your_key
+        - name: TRANSLATOR_TEXT_ENDPOINT
+          value: your_endpoint
+        - name: TRANSLATOR_TEXT_REGION
+          value: your_region
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "200m"
